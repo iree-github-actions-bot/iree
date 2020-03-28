@@ -78,9 +78,11 @@ static constexpr const FunctionPtrInfo kDynamicFunctionPtrInfos[] = {
 static const char* kVulkanLoaderSearchNames[] = {
 #if defined(IREE_PLATFORM_WINDOWS)
     "vulkan-1.dll",
+#elif defined(IREE_PLATFORM_MACOS)
+    "libvulkan.1.dylib",
 #else
     "libvulkan.so.1",
-#endif  // IREE_PLATFORM_WINDOWS
+#endif  // IREE_PLATFORM_WINDOWS / *
 };
 
 Status ResolveFunctions(DynamicSymbols* syms,

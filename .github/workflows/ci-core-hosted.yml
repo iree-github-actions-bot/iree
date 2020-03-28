@@ -1,0 +1,423 @@
+name: CI / Core (GitHub)
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  #===---------------------------------------------------------------------===//
+  # Prepare host LLVM build
+  #===---------------------------------------------------------------------===//
+  prepare-host-llvm:
+    name: 'llvm / ${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }}'
+    runs-on: ${{ matrix.host-os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host-os: [ubuntu, macos, windows]
+        host-toolchain: [clang, gcc, msvc]
+        host-config: [opt]
+        exclude:
+          - host-os: ubuntu
+            host-toolchain: msvc
+          - host-os: macos
+            host-toolchain: msvc
+          - host-os: windows
+            host-toolchain: clang
+          - host-os: windows
+            host-toolchain: gcc
+    steps:
+    - id: checkout
+      name: 'Checkout IREE'
+      uses: actions/checkout@v2
+    - id: check-submodule-versions
+      name: 'Checking LLVM version'
+      shell: bash
+      run: |
+        grep "third_party/llvm-project" SUBMODULE_VERSIONS > LLVM_VERSION
+    - id: cache-host-llvm
+      name: 'Caching static libraries/tools'
+      uses: actions/cache@v1
+      with:
+        path: .cache/llvm/
+        key: llvm-${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }}-${{ hashFiles('LLVM_VERSION') }}
+    - id: init-environment
+      if: steps.cache-host-llvm.outputs.cache-hit != 'true'
+      name: 'Initializing build environment'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+      run: ./.github/workflows/ci/init-environment.sh
+    - id: checkout-llvm
+      if: steps.cache-host-llvm.outputs.cache-hit != 'true'
+      name: 'Checkout LLVM'
+      shell: bash
+      run: |
+        git -c protocol.version=2 submodule update --init --depth=1 -- \
+            third_party/llvm-project
+    - id: build-host-llvm
+      if: steps.cache-host-llvm.outputs.cache-hit != 'true'
+      name: 'Building LLVM + MLIR'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+        HOST_TOOLCHAIN: ${{ matrix.host-toolchain }}
+        HOST_CONFIG: ${{ matrix.host-config }}
+        TARGET_OS: ${{ matrix.host-os }}
+        TARGET_ARCH: x64
+        TARGET_CONFIG: ${{ matrix.host-config }}
+      run: ./.github/workflows/ci/prepare-host-llvm.sh
+
+  #===---------------------------------------------------------------------===//
+  # Prepare Swiftshader Vulkan binaries
+  #===---------------------------------------------------------------------===//
+  prepare-swiftshader:
+    name: 'swiftshader / ${{ matrix.host-os }}-local-opt / ${{ matrix.target-os }}-${{ matrix.target-arch }}-${{ matrix.target-config }}'
+    runs-on: ${{ matrix.host-os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host-os: [ubuntu, macos, windows]
+        target-os: [host]
+        target-arch: [x64]
+        target-config: [opt]
+    steps:
+    - id: checkout
+      name: 'Checkout IREE'
+      uses: actions/checkout@v2
+    - id: check-submodule-versions
+      name: 'Checking Swiftshader version'
+      shell: bash
+      run: |
+        grep "third_party/swiftshader" SUBMODULE_VERSIONS > SWIFTSHADER_VERSION
+    - id: cache-swiftshader
+      name: 'Caching Swiftshader Vulkan ICD'
+      uses: actions/cache@v1
+      with:
+        path: .cache/swiftshader/
+        key: swiftshader-${{ matrix.host-os }}-${{ matrix.target-os }}-${{ matrix.target-arch }}-${{ matrix.target-config }}-${{ hashFiles('SWIFTSHADER_VERSION') }}
+    - id: init-environment
+      if: steps.cache-swiftshader.outputs.cache-hit != 'true'
+      name: 'Initializing build environment'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+      run: ./.github/workflows/ci/init-environment.sh
+    - id: checkout-swiftshader
+      if: steps.cache-swiftshader.outputs.cache-hit != 'true'
+      name: 'Checkout Swiftshader'
+      shell: bash
+      run: |
+        git -c protocol.version=2 submodule update --init --depth=1 -- \
+            third_party/swiftshader
+    - id: build-swiftshader
+      if: steps.cache-swiftshader.outputs.cache-hit != 'true'
+      name: 'Building Swiftshader'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+        HOST_TOOLCHAIN: local
+        HOST_CONFIG: opt
+        TARGET_OS: ${{ matrix.target-os }}
+        TARGET_ARCH: ${{ matrix.target-arch }}
+        TARGET_CONFIG: ${{ matrix.target-config }}
+      run: ./.github/workflows/ci/prepare-swiftshader.sh
+    - id: upload-swiftshader
+      name: 'Uploading Swiftshader binaries'
+      uses: actions/upload-artifact@v1
+      with:
+        name: swiftshader-icd-${{ matrix.host-os }}-${{ matrix.target-arch }}-${{ matrix.target-config }}
+        path: .cache/swiftshader/
+
+  #===---------------------------------------------------------------------===//
+  # Prepare Vulkan SDK
+  #===---------------------------------------------------------------------===//
+  # NOTE: always runs on Ubuntu as it's the fastest and we aren't actually doing
+  # anything but wget'ing and copying files.
+  prepare-vulkan-sdk:
+    name: 'vulkan-sdk / latest'
+    runs-on: ubuntu-latest
+    steps:
+    - id: checkout
+      name: 'Checkout IREE'
+      uses: actions/checkout@v2
+    - id: cache-vulkan-sdk-ubuntu
+      name: 'Caching Vulkan SDK tools (Ubuntu)'
+      uses: actions/cache@v1
+      with:
+        path: .cache/vulkan-sdk-ubuntu/
+        key: vulkan-sdk-ubuntu-${{ hashFiles('.github/workflows/ci/latest-vulkan-sdk.txt') }}
+    - id: install-vulkan-sdk-ubuntu
+      if: steps.cache-vulkan-sdk-ubuntu.outputs.cache-hit != 'true'
+      name: 'Fetching and extracting Vulkan SDK (Ubuntu)'
+      shell: bash
+      env:
+        HOST_OS: ubuntu
+      run: ./.github/workflows/ci/prepare-vulkan-sdk.sh
+    - id: cache-vulkan-sdk-macos
+      name: 'Caching Vulkan SDK tools (MacOS)'
+      uses: actions/cache@v1
+      with:
+        path: .cache/vulkan-sdk-macos/
+        key: vulkan-sdk-macos-${{ hashFiles('.github/workflows/ci/latest-vulkan-sdk.txt') }}
+    - id: install-vulkan-sdk-macos
+      if: steps.cache-vulkan-sdk-macos.outputs.cache-hit != 'true'
+      name: 'Fetching and extracting Vulkan SDK (MacOS)'
+      shell: bash
+      env:
+        HOST_OS: macos
+      run: ./.github/workflows/ci/prepare-vulkan-sdk.sh
+    - id: cache-vulkan-sdk-windows
+      name: 'Caching Vulkan SDK tools (Windows)'
+      uses: actions/cache@v1
+      with:
+        path: .cache/vulkan-sdk-windows/
+        key: vulkan-sdk-windows-${{ hashFiles('.github/workflows/ci/latest-vulkan-sdk.txt') }}
+    - id: install-vulkan-sdk-windows
+      if: steps.cache-vulkan-sdk-windows.outputs.cache-hit != 'true'
+      name: 'Fetching and extracting Vulkan SDK (Windows)'
+      shell: bash
+      env:
+        HOST_OS: windows
+      run: ./.github/workflows/ci/prepare-vulkan-sdk.sh
+
+  #===---------------------------------------------------------------------===//
+  # Build and Test Compiler
+  #===---------------------------------------------------------------------===//
+  build-and-test-compiler:
+    name: 'compiler / ${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }}'
+    needs:
+      # Requires the LLVM tools (tblgen, etc) and static libraries.
+      - prepare-host-llvm
+      # Requires the Swiftshader binary for GPU tests.
+      - prepare-swiftshader
+      # Requires Vulkan SDK for the layers.
+      - prepare-vulkan-sdk
+    runs-on: ${{ matrix.host-os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host-os: [ubuntu, macos, windows]
+        host-toolchain: [clang, gcc, msvc]
+        host-config: [opt]
+        exclude:
+          - host-os: ubuntu
+            host-toolchain: msvc
+          # TODO(benvanik): figure out how to update gcc (7.5 is too old).
+          - host-os: ubuntu
+            host-toolchain: gcc
+          - host-os: macos
+            host-toolchain: msvc
+          - host-os: windows
+            host-toolchain: clang
+          - host-os: windows
+            host-toolchain: gcc
+    steps:
+    - id: checkout
+      name: 'Checkout IREE'
+      uses: actions/checkout@v2
+    - id: check-submodule-versions
+      name: 'Checking submodule versions'
+      shell: bash
+      run: |
+        grep "third_party/llvm" SUBMODULE_VERSIONS > LLVM_VERSION
+        grep "third_party/swiftshader" SUBMODULE_VERSIONS > SWIFTSHADER_VERSION
+    - id: cache-compiler
+      name: 'Caching compiler binaries and tests'
+      uses: actions/cache@v1
+      with:
+        path: .cache/compiler/
+        key: compiler-${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }}-${{ github.sha }}
+    - id: init-environment
+      if: steps.cache-compiler.outputs.cache-hit != 'true'
+      name: 'Initializing build environment'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+      run: ./.github/workflows/ci/init-environment.sh
+    - id: cache-host-llvm
+      if: steps.cache-compiler.outputs.cache-hit != 'true'
+      name: 'Loading cached host LLVM build'
+      uses: actions/cache@v1
+      with:
+        path: .cache/llvm/
+        key: llvm-${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }}-${{ hashFiles('LLVM_VERSION') }}
+    - id: checkout-submodules
+      if: steps.cache-compiler.outputs.cache-hit != 'true'
+      name: 'Checkout submodules'
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+    - id: build
+      if: steps.cache-compiler.outputs.cache-hit != 'true'
+      name: 'Building IREE compiler'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+        HOST_TOOLCHAIN: ${{ matrix.host-toolchain }}
+        HOST_CONFIG: ${{ matrix.host-config }}
+      run: ./.github/workflows/ci/build-compiler.sh
+    - id: cache-swiftshader
+      if: steps.cache-compiler.outputs.cache-hit != 'true'
+      name: 'Loading cached Swiftshader build'
+      uses: actions/cache@v1
+      with:
+        path: .cache/swiftshader/
+        key: swiftshader-${{ matrix.host-os }}-host-x64-${{ matrix.host-config }}-${{ hashFiles('SWIFTSHADER_VERSION') }}
+    - id: cache-vulkan-sdk
+      if: steps.cache-compiler.outputs.cache-hit != 'true'
+      name: 'Loading cached Vulkan SDK'
+      uses: actions/cache@v1
+      with:
+        path: .cache/vulkan-sdk/
+        key: vulkan-sdk-${{ matrix.host-os }}-${{ hashFiles('.github/workflows/ci/latest-vulkan-sdk.txt') }}
+    - id: test
+      if: steps.cache-compiler.outputs.cache-hit != 'true'
+      name: 'Testing IREE compiler'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+        HOST_TOOLCHAIN: ${{ matrix.host-toolchain }}
+        HOST_CONFIG: ${{ matrix.host-config }}
+        TARGET_OS: ${{ matrix.host-os }}
+        TARGET_ARCH: x64
+        TARGET_CONFIG: ${{ matrix.host-config }}
+        SWIFTSHADER_PATH: /home/runner/work/iree/iree/.cache/swiftshader/
+        VULKAN_SDK_PATH: /home/runner/work/iree/iree/.cache/vulkan-sdk/
+      run: ./.github/workflows/ci/test-compiler.sh
+    # TODO(GH-1156): upload test logs.
+
+  #===---------------------------------------------------------------------===//
+  # Build and Test Runtime
+  #===---------------------------------------------------------------------===//
+  build-and-test-runtime:
+    name: 'runtime / ${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }} / ${{ matrix.target-os }}-${{ matrix.target-arch }}-${{ matrix.target-config }}'
+    needs:
+      # Requires the LLVM tools (tblgen, etc) and static libraries.
+      - prepare-host-llvm
+      # Requires the Swiftshader binary for GPU tests.
+      - prepare-swiftshader
+      # Requires Vulkan SDK for the layers.
+      - prepare-vulkan-sdk
+      # Requires compiler tools.
+      - build-and-test-compiler
+    runs-on: ${{ matrix.host-os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host-os: [ubuntu, macos, windows]
+        host-toolchain: [clang, gcc, msvc]
+        host-config: [opt]
+        target-os: [host, android, ios]
+        target-arch: [x64]
+        target-config: [opt]
+        exclude:
+          - host-os: ubuntu
+            host-toolchain: msvc
+          # TODO(benvanik): figure out how to update gcc (7.5 is too old).
+          - host-os: ubuntu
+            host-toolchain: gcc
+          - host-os: macos
+            host-toolchain: msvc
+          - host-os: windows
+            host-toolchain: clang
+          - host-os: windows
+            host-toolchain: gcc
+          - host-os: ubuntu
+            target-os: ios
+          - host-os: ubuntu
+            host-toolchain: gcc
+            target-os: android
+          - host-os: macos
+            target-os: android
+          - host-os: macos
+            host-toolchain: gcc
+            target-os: ios
+          - host-os: windows
+            target-os: android
+          - host-os: windows
+            target-os: ios
+    steps:
+    - id: checkout
+      name: 'Checkout IREE'
+      uses: actions/checkout@v2
+    - id: check-submodule-versions
+      name: 'Checking submodule versions'
+      shell: bash
+      run: |
+        grep "third_party/llvm" SUBMODULE_VERSIONS > LLVM_VERSION
+        grep "third_party/swiftshader" SUBMODULE_VERSIONS > SWIFTSHADER_VERSION
+    - id: init-environment
+      name: 'Initializing build environment'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+      run: ./.github/workflows/ci/init-environment.sh
+    - id: cache-compiler
+      name: 'Loading cached compiler binaries and tests'
+      uses: actions/cache@v1
+      with:
+        path: .cache/compiler/
+        key: compiler-${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }}-${{ github.sha }}
+    - id: cache-host-llvm
+      name: 'Loading cached host LLVM build'
+      uses: actions/cache@v1
+      with:
+        path: .cache/llvm/
+        key: llvm-${{ matrix.host-os }}-${{ matrix.host-toolchain }}-${{ matrix.host-config }}-${{ hashFiles('LLVM_VERSION') }}
+    - id: checkout-submodules
+      name: 'Checkout submodules'
+      shell: bash
+      run: |
+        git -c protocol.version=2 submodule update --init --depth=1 -- \
+            third_party/abseil-cpp \
+            third_party/benchmark \
+            third_party/dear_imgui \
+            third_party/flatbuffers \
+            third_party/google_tracing_framework \
+            third_party/googletest \
+            third_party/renderdoc_api \
+            third_party/ruy \
+            third_party/sdl2 \
+            third_party/spirv_headers \
+            third_party/spirv_tools \
+            third_party/vulkan_extensionlayer \
+            third_party/vulkan_headers \
+            third_party/vulkan_memory_allocator
+    - id: build-runtime
+      name: 'Building IREE runtime'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+        HOST_TOOLCHAIN: ${{ matrix.host-toolchain }}
+        HOST_CONFIG: ${{ matrix.host-config }}
+        TARGET_OS: ${{ matrix.target-os }}
+        TARGET_ARCH: ${{ matrix.target-arch }}
+        TARGET_CONFIG: ${{ matrix.target-config }}
+      run: ./.github/workflows/ci/build-runtime.sh
+    - id: cache-swiftshader
+      name: 'Loading cached Swiftshader build'
+      uses: actions/cache@v1
+      with:
+        path: .cache/swiftshader/
+        key: swiftshader-${{ matrix.target-os }}-${{ matrix.target-arch }}-${{ matrix.target-config }}-${{ hashFiles('SWIFTSHADER_VERSION') }}
+    - id: cache-vulkan-sdk
+      name: 'Loading cached Vulkan SDK'
+      uses: actions/cache@v1
+      with:
+        path: .cache/vulkan-sdk/
+        key: vulkan-sdk-${{ matrix.host-os }}-${{ hashFiles('.github/workflows/ci/latest-vulkan-sdk.txt') }}
+    - id: test-runtime
+      name: 'Testing IREE runtime'
+      shell: bash
+      env:
+        HOST_OS: ${{ matrix.host-os }}
+        HOST_TOOLCHAIN: ${{ matrix.host-toolchain }}
+        HOST_CONFIG: ${{ matrix.host-config }}
+        TARGET_OS: ${{ matrix.target-os }}
+        TARGET_ARCH: ${{ matrix.target-arch }}
+        TARGET_CONFIG: ${{ matrix.target-config }}
+        SWIFTSHADER_PATH: /home/runner/work/iree/iree/.cache/swiftshader/
+        VULKAN_SDK_PATH: /home/runner/work/iree/iree/.cache/vulkan-sdk/
+      run: ./.github/workflows/ci/test-runtime.sh
+    # TODO(GH-1156): upload test logs.

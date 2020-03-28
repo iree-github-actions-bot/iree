@@ -1,0 +1,4 @@
+This file is used to bump the Vulkan SDK version by invalidating the cache.
+Just change this number to the next value and the CI will update next run:
+
+1

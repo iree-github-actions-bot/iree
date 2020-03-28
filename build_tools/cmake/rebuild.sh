@@ -27,15 +27,15 @@ CMAKE_BIN=${CMAKE_BIN:-$(which cmake)}
 ninja --version
 
 cd ${ROOT_DIR?}
-if [ -d "build" ] 
+if [ -d "build" ]
 then
-  echo "Build directory already exists. Will use cached results there." 
+  echo "Build directory already exists. Will use cached results there."
 else
   echo "Build directory does not already exist. Creating a new one."
   mkdir build
 fi
 cd build
-"$CMAKE_BIN" -G Ninja -DCMAKE_BUILD_TYPE=FastBuild \
+"$CMAKE_BIN" -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo \
                       -DIREE_BUILD_COMPILER=ON \
                       -DIREE_BUILD_TESTS=ON \
                       -DIREE_BUILD_SAMPLES=OFF \

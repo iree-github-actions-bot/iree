@@ -30,10 +30,16 @@ set -e
 function find_executables() {
   set -e
   local p="$1"
+  # This should all go away. Please.
   if [ -z "$cygpath" ]; then
     # For non-windows, use the perm based executable check, which has been
     # supported by find for a very long time.
-    find "${p}" -xtype f -perm /u=x,g=x,o=x -print
+    UNAME=`uname`
+    if [[ $UNAME == "Linux" ]]; then
+      find "${p}" -xtype f -perm /u=x,g=x,o=x -print
+    else
+      find "${p}" -type f -perm /u=x,g=x,o=x -print
+    fi
   else
     # For windows, always use the newer -executable find predicate (which is
     # not supported by ancient versions of find).

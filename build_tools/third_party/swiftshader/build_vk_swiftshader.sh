@@ -35,27 +35,27 @@ set -e
 
 # Check that we're in the project root so our relative paths work as expected.
 if [[ $(basename "$PWD") != "iree" ]]; then
-    >&2 echo "******************************************************"
-    >&2 echo "* This script should be run from IREE's project root *"
-    >&2 echo "******************************************************"
-    exit 1
+  >&2 echo "******************************************************"
+  >&2 echo "* This script should be run from IREE's project root *"
+  >&2 echo "******************************************************"
+  exit 1
 fi
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    PLATFORM_ARGS=""
+  PLATFORM_ARGS=""
 elif [[ "$OSTYPE" == "darwin" ]]; then
-    # TODO(scotttodd): Mac OSX args?
-    PLATFORM_ARGS=""
+  # TODO(scotttodd): Mac OSX args?
+  PLATFORM_ARGS=""
 elif [[ "$OSTYPE" == "msys" ]] || \
-     [[ "$OSTYPE" == "cygwin" ]] || \
-     [[ "$OSTYPE" == "win32" ]]; then
-    # Some sort of Windows platform.
-    PLATFORM_ARGS="-A x64 -Thost=x64"
+    [[ "$OSTYPE" == "cygwin" ]] || \
+    [[ "$OSTYPE" == "win32" ]]; then
+  # Some sort of Windows platform.
+  PLATFORM_ARGS="-A x64 -Thost=x64"
 else
-    >&2 echo "*******************"
-    >&2 echo "* Unknown OS type *"
-    >&2 echo "*******************"
-    exit 1
+  >&2 echo "*******************"
+  >&2 echo "* Unknown OS type *"
+  >&2 echo "*******************"
+  exit 1
 fi
 
 # Generate build system in build-swiftshader/ for third_party/swiftshader/.
@@ -86,5 +86,5 @@ cmake --build build-swiftshader/ --config Release -j 8 --target vk_swiftshader
 if [[ "$OSTYPE" == "msys" ]] || \
    [[ "$OSTYPE" == "cygwin" ]] || \
    [[ "$OSTYPE" == "win32" ]]; then
-    cp build_tools/third_party/swiftshader/vk_swiftshader_icd_windows.json build-swiftshader/Release/
+  cp build_tools/third_party/swiftshader/vk_swiftshader_icd_windows.json build-swiftshader/Release/
 fi
