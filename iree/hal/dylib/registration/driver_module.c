@@ -43,6 +43,23 @@ static iree_status_t iree_hal_dylib_driver_factory_enumerate(
   return iree_ok_status();
 }
 
+static int iree_debug_print_cstring(void* params) {
+  const char* string = (const char*)params;
+  fprintf(stdout, "%s", string);
+  fflush(stdout);
+  return 0;
+}
+
+static iree_status_t iree_hal_dylib_driver_import_provider_resolve(
+    void* self, iree_string_view_t symbol_name, void** out_fn_ptr) {
+  if (iree_string_view_equal(symbol_name,
+                             IREE_SV("iree_debug_print_cstring"))) {
+    *out_fn_ptr = iree_debug_print_cstring;
+    return iree_ok_status();
+  }
+  return iree_status_from_code(IREE_STATUS_NOT_FOUND);
+}
+
 static iree_status_t iree_hal_dylib_driver_factory_try_create(
     void* self, iree_hal_driver_id_t driver_id, iree_allocator_t allocator,
     iree_hal_driver_t** out_driver) {
@@ -58,17 +75,19 @@ static iree_status_t iree_hal_dylib_driver_factory_try_create(
 
   iree_status_t status = iree_ok_status();
 
+  iree_hal_executable_import_provider_t import_provider;
+  memset(&import_provider, 0, sizeof(import_provider));
+  import_provider.resolve = iree_hal_dylib_driver_import_provider_resolve;
+
   iree_hal_executable_loader_t* loaders[2] = {NULL, NULL};
   iree_host_size_t loader_count = 0;
   if (iree_status_is_ok(status)) {
-    status = iree_hal_embedded_library_loader_create(
-        iree_hal_executable_import_provider_null(), allocator,
-        &loaders[loader_count++]);
+    status = iree_hal_embedded_library_loader_create(import_provider, allocator,
+                                                     &loaders[loader_count++]);
   }
   if (iree_status_is_ok(status)) {
-    status = iree_hal_system_library_loader_create(
-        iree_hal_executable_import_provider_null(), allocator,
-        &loaders[loader_count++]);
+    status = iree_hal_system_library_loader_create(import_provider, allocator,
+                                                   &loaders[loader_count++]);
   }
 
   iree_task_executor_t* executor = NULL;

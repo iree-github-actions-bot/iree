@@ -255,6 +255,10 @@ class LLVMAOTTargetBackend final : public TargetBackend {
                                LibraryBuilder::DispatchAttrs{localMemorySize},
                                llvmFunc);
     }
+    // DO NOT SUBMIT should be added in sorted order
+    unsigned importOrdinal =
+        libraryBuilder.addImport("iree_debug_print_cstring", /*weak=*/false);
+    assert(importOrdinal == 0);
 
     auto queryFunctionName = std::string(kQueryFunctionName);
     if (options_.linkStatic) {

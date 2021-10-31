@@ -454,19 +454,50 @@ class ConvertHALEntryPointFuncOp : public ConvertToLLVMPattern {
       return failure();
     }
 
+    HALDispatchABI abi(llvmFuncOp, getTypeConverter());
+
     // Add default zero return value.
     // TODO(ataei): do something meaningful with the return value; non-zero will
     // have the runtime bail out with an error.
     for (auto returnOp :
          llvm::make_early_inc_range(llvmFuncOp.getOps<mlir::ReturnOp>())) {
       rewriter.setInsertionPoint(returnOp);
-      auto returnValue = rewriter.createOrFold<mlir::arith::ConstantIntOp>(
-          returnOp.getLoc(), 0, 32);
+      // DO NOT SUBMIT
+      auto returnValue = callBuiltinPrintCString(
+          llvmFuncOp.getLoc(), "hello world!\n", abi, rewriter);
+      // auto returnValue = rewriter.createOrFold<mlir::arith::ConstantIntOp>(
+      //     returnOp.getLoc(), 0, 32);
       rewriter.replaceOpWithNewOp<mlir::ReturnOp>(returnOp, returnValue);
     }
 
     rewriter.eraseOp(stdFuncOp);
     return success();
+  }
+
+  // ConvertLaunchFuncOpToGpuRuntimeCallPattern has an example of packing an
+  // array of argument values.
+  static Value callBuiltinPrintCString(Location loc, StringRef stringValue,
+                                       HALDispatchABI &abi,
+                                       OpBuilder &builder) {
+    LLVM::GlobalOp globalOp;
+    {
+      OpBuilder::InsertionGuard guard(builder);
+      builder.setInsertionPoint(abi.getFuncOp());
+      auto arrayType =
+          LLVM::LLVMArrayType::get(builder.getI8Type(), stringValue.size());
+      globalOp = builder.create<LLVM::GlobalOp>(
+          loc, arrayType, /*isConstant=*/true, LLVM::Linkage::Private,
+          (abi.getFuncOp().getName() + "_hello").str(),
+          builder.getStringAttr(Twine(stringValue) + Twine('\0')),
+          /*alignment=*/1);
+    }
+    auto globalPtr = builder.create<LLVM::AddressOfOp>(loc, globalOp);
+    auto zero = builder.create<LLVM::ConstantOp>(loc, builder.getI64Type(),
+                                                 builder.getI64IntegerAttr(0));
+    auto stringPtr = builder.create<LLVM::GEPOp>(
+        loc, LLVM::LLVMPointerType::get(builder.getI8Type()), globalPtr,
+        ValueRange{zero, zero});
+    return abi.callImport(loc, /*importOrdinal=*/0, stringPtr, builder);
   }
 };
 
