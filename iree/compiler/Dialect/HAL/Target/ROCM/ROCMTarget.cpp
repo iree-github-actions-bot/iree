@@ -85,7 +85,7 @@ class ROCMTargetBackend final : public TargetBackend {
       MLIRContext *context) const override {
     Builder b(context);
     SmallVector<NamedAttribute> configItems;
-    configItems.emplace_back(b.getIdentifier("executable_targets"),
+    configItems.emplace_back(b.getStringAttr("executable_targets"),
                              getExecutableTargets(context));
 
     auto configAttr = b.getDictionaryAttr(configItems);

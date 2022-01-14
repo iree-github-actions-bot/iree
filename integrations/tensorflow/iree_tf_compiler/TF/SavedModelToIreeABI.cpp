@@ -414,8 +414,8 @@ LogicalResult materializeABIWrapper(ModuleOp module, FuncOp internalFunc,
                                     StringRef exportedName) {
   Location loc = internalFunc.getLoc();
   OpBuilder builder(internalFunc);
-  const Identifier savedModelIndexPathIdent =
-      builder.getIdentifier("tf_saved_model.index_path");
+  const StringAttr savedModelIndexPathIdent =
+      builder.getStringAttr("tf_saved_model.index_path");
   FunctionType internalFuncType = internalFunc.getType();
   json::Array refArgs;
   json::Array refReturns;
@@ -592,8 +592,8 @@ class SavedModelToIREEABIPass
 
   LogicalResult run() {
     mlir::Builder builder(getOperation());
-    const Identifier savedModelIndexPathIdent =
-        builder.getIdentifier("tf_saved_model.index_path");
+    const StringAttr savedModelIndexPathIdent =
+        builder.getStringAttr("tf_saved_model.index_path");
     (void)savedModelIndexPathIdent;
 
     // Handle saved model exported functions.
