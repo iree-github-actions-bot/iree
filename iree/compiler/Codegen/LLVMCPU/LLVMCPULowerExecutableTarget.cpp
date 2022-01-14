@@ -184,6 +184,9 @@ void LLVMCPULowerExecutableTargetPass::runOnOperation() {
           case IREE::Codegen::DispatchLoweringPassPipeline::CPUTensorToVectors:
             addTensorToVectorsPassPipeline(nestedModulePM, lowerToVectors);
             break;
+          case IREE::Codegen::DispatchLoweringPassPipeline::CPUTileAndDecompose:
+            addTileAndDecomposePassPipeline(nestedModulePM);
+            break;
           case IREE::Codegen::DispatchLoweringPassPipeline::
               CPUTileFuseAndVectorize:
             addTileFuseAndVectorizePassPipeline(nestedModulePM, lowerToVectors);

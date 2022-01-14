@@ -201,6 +201,43 @@ void addSingleTilingExpertPassPipeline(OpPassManager &passManager) {
   addLowerToVectorTransforms(nestedFuncPassManager);
 }
 
+void addTileAndDecomposePassPipeline(OpPassManager &passManager) {
+  // Tile.
+  {
+    LinalgSingleTilingExpertPassOptions tileOptions;
+    tileOptions.tilingLevel = static_cast<int64_t>(TilingLevel::L1Tiles);
+    passManager.addNestedPass<FuncOp>(
+        createLinalgSingleTilingExpertPass(tileOptions));
+    passManager.addPass(createCanonicalizerPass());
+    passManager.addPass(createCSEPass());
+  }
+  // DecomposeToLowerDimensionNamedOp.
+  {
+    LinalgSingleTilingExpertPassOptions decomposeOptions;
+    decomposeOptions.decomposeToLowerDimOp = true;
+    passManager.addNestedPass<FuncOp>(
+        createLinalgSingleTilingExpertPass(decomposeOptions));
+    passManager.addPass(createCanonicalizerPass());
+    passManager.addPass(createCSEPass());
+  }
+  // Vectorize.
+  {
+    LinalgSingleTilingExpertPassOptions vectorizeOptions;
+    vectorizeOptions.vectorize = true;
+    passManager.addNestedPass<FuncOp>(
+        createLinalgSingleTilingExpertPass(vectorizeOptions));
+    passManager.addPass(createCanonicalizerPass());
+    passManager.addPass(createCSEPass());
+  }
+
+  // Bufferize. For now use IREE bufferization.
+  addLinalgBufferizePasses(passManager, cpuAllocationFunction);
+
+  // LowerToVectors.
+  OpPassManager &nestedFuncPassManager = passManager.nest<FuncOp>();
+  addLowerToVectorTransforms(nestedFuncPassManager);
+}
+
 void addTileFuseAndVectorizePassPipeline(OpPassManager &passManager,
                                          bool lowerToVectors) {
   passManager.addPass(createCanonicalizerPass());

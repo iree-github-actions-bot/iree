@@ -209,6 +209,11 @@ void addTensorToVectorsPassPipeline(OpPassManager &passManager,
 /// using the Codegen drivers from sandbox.
 void addSingleTilingExpertPassPipeline(OpPassManager &passManager);
 
+/// Populates the passes needed to do one-level tiling + decomposition into
+/// lower dimensional ops. Mimics the `TileAndDecompose` expert in
+/// iree-llvm-sandbox, and used to lower convolution operations.
+void addTileAndDecomposePassPipeline(OpPassManager &passManager);
+
 /// Populates the passes needed to multi level tile, fuse and vectorize lowering
 /// of linalg ops on tensors to vectors operations.
 void addTileFuseAndVectorizePassPipeline(OpPassManager &passManager,

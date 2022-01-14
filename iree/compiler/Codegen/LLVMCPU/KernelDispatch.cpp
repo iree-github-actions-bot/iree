@@ -559,6 +559,52 @@ static LogicalResult setRootConfig(
   return success();
 }
 
+/// Sets the lowering configuration for linalg.conv* operations.
+/// For now only testing linalg.conv_2d_nhwc_hwcf.
+static LogicalResult setRootConfig(
+    FuncOp entryPointFn, linalg::Conv2DNhwcHwcfOp convOp,
+    ArrayRef<LoopTilingAndDistributionInfo> tiledLoops) {
+  // If there is already a set configuration do nothing.
+  if (getLoweringConfig(convOp)) return success();
+
+  // For VMVX, do not use vectorization. Just lower to default.
+  if (isVMVXBackend(entryPointFn)) return success();
+
+  auto inputType = convOp.inputs()[0].getType().cast<ShapedType>();
+  Type elementType = inputType.getElementType();
+  if (!elementType.isIntOrFloat()) return success();
+  unsigned byteWidth = elementType.getIntOrFloatBitWidth() / 8;
+  int64_t vectorSize;
+  if (Optional<int64_t> nativeVectorSizeVal =
+          getNativeVectorSizeInBytes(entryPointFn)) {
+    vectorSize = nativeVectorSizeVal.getValue() / byteWidth;
+  } else {
+    vectorSize = clNativeVectorSizeInBytes;
+  }
+  SmallVector<int64_t> vectorSizeVals(tiledLoops.size(), 1);
+  vectorSizeVals.back() = vectorSize;
+
+  SmallVector<int64_t> workloadPerWorkgroup = getDefaultWorkloadPerWorkgroup(
+      tiledLoops, ArrayRef<int64_t>(vectorSizeVals));
+
+  // Set the translation info.
+  setTranslationInfo(
+      entryPointFn,
+      IREE::Codegen::DispatchLoweringPassPipeline::CPUTileAndDecompose,
+      workloadPerWorkgroup, /*workgroupSize=*/ArrayRef<int64_t>{});
+
+  // For now hard-wire the same parameters used in iree-llvm-sandbox.
+  SmallVector<int64_t> l1TileSizes = {1, 1, 8, 32, 1, 1, 8};
+  TileSizesListType tileSizes;
+  tileSizes.push_back({});
+  tileSizes.emplace_back(std::move(l1TileSizes));
+  auto config = IREE::Codegen::LoweringConfigAttr::get(
+      entryPointFn.getContext(), tileSizes, {});
+  setLoweringConfig(convOp, config);
+
+  return success();
+}
+
 /// Finds the root operation in the given list of Linalg operations and sets
 /// its configuration. Returns error for multiple root operations.
 static LogicalResult setRootConfig(
@@ -569,7 +615,7 @@ static LogicalResult setRootConfig(
     auto setRootConfigFn = [&](Operation *op) -> LogicalResult {
       return TypeSwitch<Operation *, LogicalResult>(op)
           .Case<linalg::Mmt4DOp, linalg::ContractionOpInterface,
-                IREE::LinalgExt::FftOp>([&](auto op) {
+                linalg::Conv2DNhwcHwcfOp, IREE::LinalgExt::FftOp>([&](auto op) {
             return setRootConfig(entryPointFn, op, tiledLoops);
           })
           .Case<linalg::GenericOp>([&](auto genericOp) {
