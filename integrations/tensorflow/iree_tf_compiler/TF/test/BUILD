@@ -30,9 +30,9 @@ iree_lit_test_suite(
         ],
         include = ["*.mlir"],
     ),
-    data = [
+    cfg = "@iree//integrations/tensorflow:lit.cfg.py",
+    tools = [
         "//iree_tf_compiler:iree-tf-opt",
         "@llvm-project//llvm:FileCheck",
     ],
-    driver = "@iree//iree/tools:run_lit.sh",
 )

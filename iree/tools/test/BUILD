@@ -29,28 +29,28 @@ iree_lit_test_suite(
         ],
         include = ["*.mlir"],
     ),
-    data = [
+    tags = [
+        "hostonly",
+    ],
+    tools = [
         "//iree/tools:iree-benchmark-module",
         "//iree/tools:iree-run-mlir",
         "//iree/tools:iree-run-module",
         "//iree/tools:iree-translate",
-        "@llvm-project//lld",
+        "@llvm-project//lld:ld.lld",
         "@llvm-project//llvm:FileCheck",
-    ],
-    tags = [
-        "hostonly",
     ],
 )
 
 iree_lit_test_suite(
     name = "benchmark_flags",
     srcs = ["benchmark_flags.txt"],
-    data = [
+    tags = [
+        "hostonly",
+    ],
+    tools = [
         "//iree/tools:iree-benchmark-module",
         "//iree/tools:iree-translate",
         "@llvm-project//llvm:FileCheck",
-    ],
-    tags = [
-        "hostonly",
     ],
 )

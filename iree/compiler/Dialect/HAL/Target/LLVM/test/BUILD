@@ -21,9 +21,9 @@ iree_lit_test_suite(
         ],
         include = ["*.mlir"],
     ),
-    data = [
+    tools = [
         "//iree/tools:iree-opt",
-        "@llvm-project//lld",
+        "@llvm-project//lld:ld.lld",
         "@llvm-project//llvm:FileCheck",
     ],
 )

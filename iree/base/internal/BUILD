@@ -191,11 +191,11 @@ cc_binary(
 iree_lit_test_suite(
     name = "flags_test",
     srcs = ["flags_test.txt"],
-    data = [
+    tags = ["hostonly"],
+    tools = [
         ":flags_demo",
         "@llvm-project//llvm:FileCheck",
     ],
-    tags = ["hostonly"],
 )
 
 cc_library(

@@ -28,6 +28,7 @@ EXPLICIT_TARGET_MAPPING = {
     # LLVM
     "@llvm-project//llvm:IPO": ["LLVMipo"],
     "@llvm-project//lld": ["lld"],
+    "@llvm-project//lld:ld.lld": ["lld"],
     "@llvm-project//llvm:FileChec": ["FileCheck"],
     # MLIR
     "@llvm-project//mlir:AllPassesAndDialects": [

@@ -6,91 +6,92 @@
 
 """Bazel macros for running lit tests."""
 
+load("//third_party/py/lit:lit_test.bzl", "lit_test", "lit_test_suite")
+
 def iree_lit_test(
         name,
-        test_file,
-        data,
-        size = "small",
-        driver = "//iree/tools:run_lit.sh",
+        cfg = "//iree:lit.cfg.py",
+        tools = None,
+        env = None,
         **kwargs):
-    """Creates a lit test from the specified source file.
+    """A thin wrapper around lit_test with some opinionated settings.
+
+    See the base lit_test for more details on argument meanings.
 
     Args:
-      name: name of the generated test suite.
-      test_file: the test file with the lit test
-      data: binaries used in the lit tests.
-      size: size of the tests.
-      driver: the shell runner for the lit tests.
-      **kwargs: Any additional arguments that will be passed to the underlying sh_test.
+      name: name for the test.
+      cfg: string. lit config file.
+      tools: label_list. tools that should be included on the PATH.
+        llvm-symbolizer is added by default.
+      env: string_dict. Environment variables available to the test at runtime.
+        FILECHECK_OPTS=--enable-var-scope is added if FILECHECK_OPTS is not
+        already set.
+      **kwargs: additional keyword args to forward to the underyling lit_test.
     """
-    data = data if data else []
+
+    tools = tools or []
+    env = env or {}
 
     # Always include llvm-sybmolizer so we get useful stack traces. Maybe it
     # would be better to force everyone to do this explicitly, but since
     # forgetting wouldn't cause the test to fail, only make debugging harder
     # when it does, I think better to hardcode it here.
     llvm_symbolizer = "@llvm-project//llvm:llvm-symbolizer"
-    if llvm_symbolizer not in data:
-        data.append(llvm_symbolizer)
+    if llvm_symbolizer not in tools:
+        tools.append(llvm_symbolizer)
 
-    # First argument is the test. The rest are tools to add to the path.
-    data = [test_file] + data
+    filecheck_env_var = "FILECHECK_OPTS"
+    if filecheck_env_var not in env:
+        env[filecheck_env_var] = "--enable-var-scope"
 
-    native.sh_test(
+    lit_test(
         name = name,
-        srcs = [driver],
-        size = size,
-        data = data,
-        env = {"FILECHECK_OPTS": "--enable-var-scope"},
-        args = ["$(location {})".format(file) for file in data],
+        cfg = cfg,
+        tools = tools,
+        env = env,
         **kwargs
     )
 
 def iree_lit_test_suite(
         name,
-        srcs,
-        data,
-        size = "small",
-        driver = "//iree/tools:run_lit.sh",
-        tags = [],
+        cfg = "//iree:lit.cfg.py",
+        tools = None,
+        env = None,
         **kwargs):
-    """Creates one lit test per source file and a test suite that bundles them.
+    """A thin wrapper around lit_test_suite with some opinionated settings.
+
+    See the base lit_test for more details on argument meanings.
 
     Args:
-      name: name of the generated test suite.
-      data: binaries used in the lit tests.
-      srcs: test file sources.
-      size: size of the tests.
-      driver: the shell runner for the lit tests.
-      tags: tags to apply to the test. Note that as in standard test suites, manual
-            is treated specially and will also apply to the test suite itself.
-      **kwargs: Any additional arguments that will be passed to the underlying tests and test_suite.
+      name: name for the test suite.
+      cfg: string. lit config file.
+      tools: label_list. tools that should be included on the PATH.
+        llvm-symbolizer is added by default.
+      env: string_dict. Environment variables available to the test at runtime.
+        FILECHECK_OPTS=--enable-var-scope is added if FILECHECK_OPTS is not
+        already set.
+      **kwargs: additional keyword args to forward to the underyling
+        lit_test_suite.
     """
-    tests = []
-    for test_file in srcs:
-        # It's generally good practice to prefix any generated names with the
-        # macro name, but we're trying to match the style of the names that are
-        # used for LLVM internally.
-        test_name = "%s.test" % (test_file)
-        iree_lit_test(
-            name = test_name,
-            test_file = test_file,
-            size = size,
-            data = data,
-            driver = driver,
-            tags = tags,
-            **kwargs
-        )
-        tests.append(test_name)
+    tools = tools or []
+    env = env or {}
 
-    native.test_suite(
+    # Always include llvm-sybmolizer so we get useful stack traces. Maybe it
+    # would be better to force everyone to do this explicitly, but since
+    # forgetting wouldn't cause the test to fail, only make debugging harder
+    # when it does, I think better to hardcode it here.
+    llvm_symbolizer = "@llvm-project//llvm:llvm-symbolizer"
+    if llvm_symbolizer not in tools:
+        tools.append(llvm_symbolizer)
+
+    filecheck_env_var = "FILECHECK_OPTS"
+    if filecheck_env_var not in env:
+        env[filecheck_env_var] = "--enable-var-scope"
+
+    lit_test_suite(
         name = name,
-        tests = tests,
-        # Note that only the manual tag really has any effect here. Others are
-        # used for test suite filtering, but all tests are passed the same tags.
-        tags = tags,
-        # If there are kwargs that need to be passed here which only apply to
-        # the generated tests and not to test_suite, they should be extracted
-        # into separate named arguments.
+        cfg = cfg,
+        tools = tools,
+        env = env,
         **kwargs
     )
