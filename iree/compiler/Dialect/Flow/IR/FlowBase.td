@@ -59,6 +59,8 @@ def FLOW_Dialect : Dialect {
     to communicate statically available information such as the expected
     workload size, shapes of inputs and outputs, etc.
   }];
+  let useDefaultTypePrinterParser = 0;
+  let useDefaultAttributePrinterParser = 0;
 }
 
 //===----------------------------------------------------------------------===//

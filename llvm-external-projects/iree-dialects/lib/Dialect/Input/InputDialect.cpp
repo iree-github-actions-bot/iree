@@ -30,14 +30,3 @@ void IREEInputDialect::initialize() {
       >();
 }
 
-Type IREEInputDialect::parseType(DialectAsmParser &parser) const {
-  StringRef typeTag;
-  Type genType;
-  if (succeeded(parser.parseKeyword(&typeTag)))
-    generatedTypeParser(parser, typeTag, genType);
-  return genType;
-}
-
-void IREEInputDialect::printType(Type type, DialectAsmPrinter &printer) const {
-  (void)generatedTypePrinter(type, printer);
-}
