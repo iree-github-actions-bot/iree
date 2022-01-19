@@ -3409,7 +3409,7 @@ module {
     %2288 = mhlo.multiply %2287, %1114 : tensor<1x4x384x384xf32>
     %2289 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %2290 = mhlo.add %2288, %2289 : tensor<1x4x384x384xf32>
-    %2291 = "mhlo.reduce"(%2290, %1117) ( {
+    %2291 = "mhlo.reduce"(%2290, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3417,7 +3417,7 @@ module {
     %2292 = "mhlo.broadcast_in_dim"(%2291) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %2293 = mhlo.subtract %2290, %2292 : tensor<1x4x384x384xf32>
     %2294 = "mhlo.exponential"(%2293) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %2295 = "mhlo.reduce"(%2294, %1118) ( {
+    %2295 = "mhlo.reduce"(%2294, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3547,7 +3547,7 @@ module {
     %2418 = mhlo.multiply %2417, %1114 : tensor<1x4x384x384xf32>
     %2419 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %2420 = mhlo.add %2418, %2419 : tensor<1x4x384x384xf32>
-    %2421 = "mhlo.reduce"(%2420, %1117) ( {
+    %2421 = "mhlo.reduce"(%2420, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3555,7 +3555,7 @@ module {
     %2422 = "mhlo.broadcast_in_dim"(%2421) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %2423 = mhlo.subtract %2420, %2422 : tensor<1x4x384x384xf32>
     %2424 = "mhlo.exponential"(%2423) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %2425 = "mhlo.reduce"(%2424, %1118) ( {
+    %2425 = "mhlo.reduce"(%2424, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3685,7 +3685,7 @@ module {
     %2548 = mhlo.multiply %2547, %1114 : tensor<1x4x384x384xf32>
     %2549 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %2550 = mhlo.add %2548, %2549 : tensor<1x4x384x384xf32>
-    %2551 = "mhlo.reduce"(%2550, %1117) ( {
+    %2551 = "mhlo.reduce"(%2550, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3693,7 +3693,7 @@ module {
     %2552 = "mhlo.broadcast_in_dim"(%2551) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %2553 = mhlo.subtract %2550, %2552 : tensor<1x4x384x384xf32>
     %2554 = "mhlo.exponential"(%2553) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %2555 = "mhlo.reduce"(%2554, %1118) ( {
+    %2555 = "mhlo.reduce"(%2554, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3823,7 +3823,7 @@ module {
     %2678 = mhlo.multiply %2677, %1114 : tensor<1x4x384x384xf32>
     %2679 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %2680 = mhlo.add %2678, %2679 : tensor<1x4x384x384xf32>
-    %2681 = "mhlo.reduce"(%2680, %1117) ( {
+    %2681 = "mhlo.reduce"(%2680, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3831,7 +3831,7 @@ module {
     %2682 = "mhlo.broadcast_in_dim"(%2681) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %2683 = mhlo.subtract %2680, %2682 : tensor<1x4x384x384xf32>
     %2684 = "mhlo.exponential"(%2683) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %2685 = "mhlo.reduce"(%2684, %1118) ( {
+    %2685 = "mhlo.reduce"(%2684, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3961,7 +3961,7 @@ module {
     %2808 = mhlo.multiply %2807, %1114 : tensor<1x4x384x384xf32>
     %2809 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %2810 = mhlo.add %2808, %2809 : tensor<1x4x384x384xf32>
-    %2811 = "mhlo.reduce"(%2810, %1117) ( {
+    %2811 = "mhlo.reduce"(%2810, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -3969,7 +3969,7 @@ module {
     %2812 = "mhlo.broadcast_in_dim"(%2811) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %2813 = mhlo.subtract %2810, %2812 : tensor<1x4x384x384xf32>
     %2814 = "mhlo.exponential"(%2813) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %2815 = "mhlo.reduce"(%2814, %1118) ( {
+    %2815 = "mhlo.reduce"(%2814, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4099,7 +4099,7 @@ module {
     %2938 = mhlo.multiply %2937, %1114 : tensor<1x4x384x384xf32>
     %2939 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %2940 = mhlo.add %2938, %2939 : tensor<1x4x384x384xf32>
-    %2941 = "mhlo.reduce"(%2940, %1117) ( {
+    %2941 = "mhlo.reduce"(%2940, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4107,7 +4107,7 @@ module {
     %2942 = "mhlo.broadcast_in_dim"(%2941) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %2943 = mhlo.subtract %2940, %2942 : tensor<1x4x384x384xf32>
     %2944 = "mhlo.exponential"(%2943) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %2945 = "mhlo.reduce"(%2944, %1118) ( {
+    %2945 = "mhlo.reduce"(%2944, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4237,7 +4237,7 @@ module {
     %3068 = mhlo.multiply %3067, %1114 : tensor<1x4x384x384xf32>
     %3069 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3070 = mhlo.add %3068, %3069 : tensor<1x4x384x384xf32>
-    %3071 = "mhlo.reduce"(%3070, %1117) ( {
+    %3071 = "mhlo.reduce"(%3070, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4245,7 +4245,7 @@ module {
     %3072 = "mhlo.broadcast_in_dim"(%3071) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3073 = mhlo.subtract %3070, %3072 : tensor<1x4x384x384xf32>
     %3074 = "mhlo.exponential"(%3073) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3075 = "mhlo.reduce"(%3074, %1118) ( {
+    %3075 = "mhlo.reduce"(%3074, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4375,7 +4375,7 @@ module {
     %3198 = mhlo.multiply %3197, %1114 : tensor<1x4x384x384xf32>
     %3199 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3200 = mhlo.add %3198, %3199 : tensor<1x4x384x384xf32>
-    %3201 = "mhlo.reduce"(%3200, %1117) ( {
+    %3201 = "mhlo.reduce"(%3200, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4383,7 +4383,7 @@ module {
     %3202 = "mhlo.broadcast_in_dim"(%3201) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3203 = mhlo.subtract %3200, %3202 : tensor<1x4x384x384xf32>
     %3204 = "mhlo.exponential"(%3203) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3205 = "mhlo.reduce"(%3204, %1118) ( {
+    %3205 = "mhlo.reduce"(%3204, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4513,7 +4513,7 @@ module {
     %3328 = mhlo.multiply %3327, %1114 : tensor<1x4x384x384xf32>
     %3329 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3330 = mhlo.add %3328, %3329 : tensor<1x4x384x384xf32>
-    %3331 = "mhlo.reduce"(%3330, %1117) ( {
+    %3331 = "mhlo.reduce"(%3330, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4521,7 +4521,7 @@ module {
     %3332 = "mhlo.broadcast_in_dim"(%3331) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3333 = mhlo.subtract %3330, %3332 : tensor<1x4x384x384xf32>
     %3334 = "mhlo.exponential"(%3333) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3335 = "mhlo.reduce"(%3334, %1118) ( {
+    %3335 = "mhlo.reduce"(%3334, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4651,7 +4651,7 @@ module {
     %3458 = mhlo.multiply %3457, %1114 : tensor<1x4x384x384xf32>
     %3459 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3460 = mhlo.add %3458, %3459 : tensor<1x4x384x384xf32>
-    %3461 = "mhlo.reduce"(%3460, %1117) ( {
+    %3461 = "mhlo.reduce"(%3460, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4659,7 +4659,7 @@ module {
     %3462 = "mhlo.broadcast_in_dim"(%3461) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3463 = mhlo.subtract %3460, %3462 : tensor<1x4x384x384xf32>
     %3464 = "mhlo.exponential"(%3463) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3465 = "mhlo.reduce"(%3464, %1118) ( {
+    %3465 = "mhlo.reduce"(%3464, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4789,7 +4789,7 @@ module {
     %3588 = mhlo.multiply %3587, %1114 : tensor<1x4x384x384xf32>
     %3589 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3590 = mhlo.add %3588, %3589 : tensor<1x4x384x384xf32>
-    %3591 = "mhlo.reduce"(%3590, %1117) ( {
+    %3591 = "mhlo.reduce"(%3590, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4797,7 +4797,7 @@ module {
     %3592 = "mhlo.broadcast_in_dim"(%3591) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3593 = mhlo.subtract %3590, %3592 : tensor<1x4x384x384xf32>
     %3594 = "mhlo.exponential"(%3593) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3595 = "mhlo.reduce"(%3594, %1118) ( {
+    %3595 = "mhlo.reduce"(%3594, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4927,7 +4927,7 @@ module {
     %3718 = mhlo.multiply %3717, %1114 : tensor<1x4x384x384xf32>
     %3719 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3720 = mhlo.add %3718, %3719 : tensor<1x4x384x384xf32>
-    %3721 = "mhlo.reduce"(%3720, %1117) ( {
+    %3721 = "mhlo.reduce"(%3720, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -4935,7 +4935,7 @@ module {
     %3722 = "mhlo.broadcast_in_dim"(%3721) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3723 = mhlo.subtract %3720, %3722 : tensor<1x4x384x384xf32>
     %3724 = "mhlo.exponential"(%3723) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3725 = "mhlo.reduce"(%3724, %1118) ( {
+    %3725 = "mhlo.reduce"(%3724, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5065,7 +5065,7 @@ module {
     %3848 = mhlo.multiply %3847, %1114 : tensor<1x4x384x384xf32>
     %3849 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3850 = mhlo.add %3848, %3849 : tensor<1x4x384x384xf32>
-    %3851 = "mhlo.reduce"(%3850, %1117) ( {
+    %3851 = "mhlo.reduce"(%3850, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5073,7 +5073,7 @@ module {
     %3852 = "mhlo.broadcast_in_dim"(%3851) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3853 = mhlo.subtract %3850, %3852 : tensor<1x4x384x384xf32>
     %3854 = "mhlo.exponential"(%3853) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3855 = "mhlo.reduce"(%3854, %1118) ( {
+    %3855 = "mhlo.reduce"(%3854, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5203,7 +5203,7 @@ module {
     %3978 = mhlo.multiply %3977, %1114 : tensor<1x4x384x384xf32>
     %3979 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %3980 = mhlo.add %3978, %3979 : tensor<1x4x384x384xf32>
-    %3981 = "mhlo.reduce"(%3980, %1117) ( {
+    %3981 = "mhlo.reduce"(%3980, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5211,7 +5211,7 @@ module {
     %3982 = "mhlo.broadcast_in_dim"(%3981) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %3983 = mhlo.subtract %3980, %3982 : tensor<1x4x384x384xf32>
     %3984 = "mhlo.exponential"(%3983) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %3985 = "mhlo.reduce"(%3984, %1118) ( {
+    %3985 = "mhlo.reduce"(%3984, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5341,7 +5341,7 @@ module {
     %4108 = mhlo.multiply %4107, %1114 : tensor<1x4x384x384xf32>
     %4109 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %4110 = mhlo.add %4108, %4109 : tensor<1x4x384x384xf32>
-    %4111 = "mhlo.reduce"(%4110, %1117) ( {
+    %4111 = "mhlo.reduce"(%4110, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5349,7 +5349,7 @@ module {
     %4112 = "mhlo.broadcast_in_dim"(%4111) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %4113 = mhlo.subtract %4110, %4112 : tensor<1x4x384x384xf32>
     %4114 = "mhlo.exponential"(%4113) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %4115 = "mhlo.reduce"(%4114, %1118) ( {
+    %4115 = "mhlo.reduce"(%4114, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5479,7 +5479,7 @@ module {
     %4238 = mhlo.multiply %4237, %1114 : tensor<1x4x384x384xf32>
     %4239 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %4240 = mhlo.add %4238, %4239 : tensor<1x4x384x384xf32>
-    %4241 = "mhlo.reduce"(%4240, %1117) ( {
+    %4241 = "mhlo.reduce"(%4240, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5487,7 +5487,7 @@ module {
     %4242 = "mhlo.broadcast_in_dim"(%4241) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %4243 = mhlo.subtract %4240, %4242 : tensor<1x4x384x384xf32>
     %4244 = "mhlo.exponential"(%4243) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %4245 = "mhlo.reduce"(%4244, %1118) ( {
+    %4245 = "mhlo.reduce"(%4244, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5617,7 +5617,7 @@ module {
     %4368 = mhlo.multiply %4367, %1114 : tensor<1x4x384x384xf32>
     %4369 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %4370 = mhlo.add %4368, %4369 : tensor<1x4x384x384xf32>
-    %4371 = "mhlo.reduce"(%4370, %1117) ( {
+    %4371 = "mhlo.reduce"(%4370, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5625,7 +5625,7 @@ module {
     %4372 = "mhlo.broadcast_in_dim"(%4371) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %4373 = mhlo.subtract %4370, %4372 : tensor<1x4x384x384xf32>
     %4374 = "mhlo.exponential"(%4373) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %4375 = "mhlo.reduce"(%4374, %1118) ( {
+    %4375 = "mhlo.reduce"(%4374, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5755,7 +5755,7 @@ module {
     %4498 = mhlo.multiply %4497, %1114 : tensor<1x4x384x384xf32>
     %4499 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %4500 = mhlo.add %4498, %4499 : tensor<1x4x384x384xf32>
-    %4501 = "mhlo.reduce"(%4500, %1117) ( {
+    %4501 = "mhlo.reduce"(%4500, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5763,7 +5763,7 @@ module {
     %4502 = "mhlo.broadcast_in_dim"(%4501) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %4503 = mhlo.subtract %4500, %4502 : tensor<1x4x384x384xf32>
     %4504 = "mhlo.exponential"(%4503) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %4505 = "mhlo.reduce"(%4504, %1118) ( {
+    %4505 = "mhlo.reduce"(%4504, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5893,7 +5893,7 @@ module {
     %4628 = mhlo.multiply %4627, %1114 : tensor<1x4x384x384xf32>
     %4629 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %4630 = mhlo.add %4628, %4629 : tensor<1x4x384x384xf32>
-    %4631 = "mhlo.reduce"(%4630, %1117) ( {
+    %4631 = "mhlo.reduce"(%4630, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -5901,7 +5901,7 @@ module {
     %4632 = "mhlo.broadcast_in_dim"(%4631) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %4633 = mhlo.subtract %4630, %4632 : tensor<1x4x384x384xf32>
     %4634 = "mhlo.exponential"(%4633) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %4635 = "mhlo.reduce"(%4634, %1118) ( {
+    %4635 = "mhlo.reduce"(%4634, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6031,7 +6031,7 @@ module {
     %4758 = mhlo.multiply %4757, %1114 : tensor<1x4x384x384xf32>
     %4759 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %4760 = mhlo.add %4758, %4759 : tensor<1x4x384x384xf32>
-    %4761 = "mhlo.reduce"(%4760, %1117) ( {
+    %4761 = "mhlo.reduce"(%4760, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6039,7 +6039,7 @@ module {
     %4762 = "mhlo.broadcast_in_dim"(%4761) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %4763 = mhlo.subtract %4760, %4762 : tensor<1x4x384x384xf32>
     %4764 = "mhlo.exponential"(%4763) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %4765 = "mhlo.reduce"(%4764, %1118) ( {
+    %4765 = "mhlo.reduce"(%4764, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6169,7 +6169,7 @@ module {
     %4888 = mhlo.multiply %4887, %1114 : tensor<1x4x384x384xf32>
     %4889 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %4890 = mhlo.add %4888, %4889 : tensor<1x4x384x384xf32>
-    %4891 = "mhlo.reduce"(%4890, %1117) ( {
+    %4891 = "mhlo.reduce"(%4890, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6177,7 +6177,7 @@ module {
     %4892 = "mhlo.broadcast_in_dim"(%4891) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %4893 = mhlo.subtract %4890, %4892 : tensor<1x4x384x384xf32>
     %4894 = "mhlo.exponential"(%4893) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %4895 = "mhlo.reduce"(%4894, %1118) ( {
+    %4895 = "mhlo.reduce"(%4894, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6307,7 +6307,7 @@ module {
     %5018 = mhlo.multiply %5017, %1114 : tensor<1x4x384x384xf32>
     %5019 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %5020 = mhlo.add %5018, %5019 : tensor<1x4x384x384xf32>
-    %5021 = "mhlo.reduce"(%5020, %1117) ( {
+    %5021 = "mhlo.reduce"(%5020, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6315,7 +6315,7 @@ module {
     %5022 = "mhlo.broadcast_in_dim"(%5021) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %5023 = mhlo.subtract %5020, %5022 : tensor<1x4x384x384xf32>
     %5024 = "mhlo.exponential"(%5023) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %5025 = "mhlo.reduce"(%5024, %1118) ( {
+    %5025 = "mhlo.reduce"(%5024, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6445,7 +6445,7 @@ module {
     %5148 = mhlo.multiply %5147, %1114 : tensor<1x4x384x384xf32>
     %5149 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %5150 = mhlo.add %5148, %5149 : tensor<1x4x384x384xf32>
-    %5151 = "mhlo.reduce"(%5150, %1117) ( {
+    %5151 = "mhlo.reduce"(%5150, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6453,7 +6453,7 @@ module {
     %5152 = "mhlo.broadcast_in_dim"(%5151) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %5153 = mhlo.subtract %5150, %5152 : tensor<1x4x384x384xf32>
     %5154 = "mhlo.exponential"(%5153) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %5155 = "mhlo.reduce"(%5154, %1118) ( {
+    %5155 = "mhlo.reduce"(%5154, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6583,7 +6583,7 @@ module {
     %5278 = mhlo.multiply %5277, %1114 : tensor<1x4x384x384xf32>
     %5279 = "mhlo.broadcast_in_dim"(%2254) {broadcast_dimensions = dense<[0, 1, 2, 3]> : tensor<4xi64>} : (tensor<1x1x384x384xf32>) -> tensor<1x4x384x384xf32>
     %5280 = mhlo.add %5278, %5279 : tensor<1x4x384x384xf32>
-    %5281 = "mhlo.reduce"(%5280, %1117) ( {
+    %5281 = "mhlo.reduce"(%5280, %1117) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()
@@ -6591,7 +6591,7 @@ module {
     %5282 = "mhlo.broadcast_in_dim"(%5281) {broadcast_dimensions = dense<[0, 1, 2]> : tensor<3xi64>} : (tensor<1x4x384xf32>) -> tensor<1x4x384x384xf32>
     %5283 = mhlo.subtract %5280, %5282 : tensor<1x4x384x384xf32>
     %5284 = "mhlo.exponential"(%5283) : (tensor<1x4x384x384xf32>) -> tensor<1x4x384x384xf32>
-    %5285 = "mhlo.reduce"(%5284, %1118) ( {
+    %5285 = "mhlo.reduce"(%5284, %1118) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.add %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()

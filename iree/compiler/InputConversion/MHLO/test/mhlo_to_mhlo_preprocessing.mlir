@@ -67,7 +67,7 @@ func @reduce_window(%input: tensor<1x16x16x64xf32>) -> tensor<1x8x8x64xf32> {
   // CHECK-SAME: edge_padding_low = dense<[0, 1, 1, 0]> : tensor<4xi64>
   //      CHECK: "mhlo.reduce_window"(%[[PAD]], %[[INITVAL]])
   //  CHECK-NOT: padding
-  %0 = "mhlo.reduce_window"(%input, %initval) ( {
+  %0 = "mhlo.reduce_window"(%input, %initval) ({
   ^bb0(%arg1: tensor<f32>, %arg2: tensor<f32>):   // no predecessors
     %3 = mhlo.maximum %arg1, %arg2 : tensor<f32>
     "mhlo.return"(%3) : (tensor<f32>) -> ()
@@ -97,7 +97,7 @@ func @reduce_window_variadic(%input0: tensor<1x16x16x64xf32>, %input1: tensor<1x
   // CHECK-SAME: edge_padding_low = dense<[0, 1, 1, 0]> : tensor<4xi64>
   //      CHECK: "mhlo.reduce_window"(%[[PAD0]], %[[PAD1]], %[[INITVAL0]], %[[INITVAL1]])
   //  CHECK-NOT: padding
-  %0:2 = "mhlo.reduce_window"(%input0, %input1, %initval0, %initval1) ( {
+  %0:2 = "mhlo.reduce_window"(%input0, %input1, %initval0, %initval1) ({
   ^bb0(%arg1: tensor<f32>, %arg2: tensor<i32>, %arg3: tensor<f32>, %arg4: tensor<i32>):   // no predecessors
     %3 = mhlo.maximum %arg1, %arg3 : tensor<f32>
     %4 = mhlo.add %arg2, %arg4 : tensor<i32>

@@ -13,6 +13,7 @@
 #include "mlir/Conversion/LLVMCommon/Pattern.h"
 #include "mlir/Conversion/LLVMCommon/TypeConverter.h"
 #include "mlir/Conversion/VectorToLLVM/ConvertVectorToLLVM.h"
+#include "mlir/Dialect/GPU/GPUDialect.h"
 #include "mlir/Dialect/GPU/Passes.h"
 #include "mlir/Dialect/LLVMIR/NVVMDialect.h"
 #include "mlir/Dialect/LLVMIR/ROCDLDialect.h"
@@ -339,8 +340,10 @@ struct HALInterfaceWorkgroupOpsConverter final
       InterfaceOpTy op, typename InterfaceOpTy::Adaptor adaptor,
       ConversionPatternRewriter &rewriter) const override {
     int32_t index = static_cast<int32_t>(op.dimension().getSExtValue());
-    std::array<const char *, 3> dimAttr{"x", "y", "z"};
-    rewriter.replaceOpWithNewOp<NewOpTy>(op, op.getType(), dimAttr[index]);
+    rewriter.replaceOpWithNewOp<NewOpTy>(
+        op, op.getType(),
+        gpu::DimensionAttr::get(op.getContext(),
+                                *gpu::symbolizeDimension(index)));
     return success();
   }
 };

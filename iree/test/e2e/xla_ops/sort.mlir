@@ -1,7 +1,7 @@
 func @sort1D() {
   %input = util.unfoldable_constant dense<[3, 2, 1, 4]> : tensor<4xi32>
 
-  %sort = "mhlo.sort"(%input) ( {
+  %sort = "mhlo.sort"(%input) ({
   ^bb0(%arg1: tensor<i32>, %arg2: tensor<i32>):  // no predecessors
     %compare = "mhlo.compare"(%arg1, %arg2) {comparison_direction = "LT"} : (tensor<i32>, tensor<i32>) -> tensor<i1>
     "mhlo.return"(%compare) : (tensor<i1>) -> ()
@@ -15,7 +15,7 @@ func @sort2D() {
   %input = util.unfoldable_constant dense<[[1, 2, 3, 4],
                                            [4, 3, 2, 1]]> : tensor<2x4xi32>
 
-  %sort = "mhlo.sort"(%input) ( {
+  %sort = "mhlo.sort"(%input) ({
   ^bb0(%arg1: tensor<i32>, %arg2: tensor<i32>):  // no predecessors
     %compare = "mhlo.compare"(%arg1, %arg2) {comparison_direction = "LT"} : (tensor<i32>, tensor<i32>) -> tensor<i1>
     "mhlo.return"(%compare) : (tensor<i1>) -> ()
@@ -29,7 +29,7 @@ func @sort3D() {
   %input = util.unfoldable_constant dense<[[[1, 2, 3, 4],
                                             [4, 3, 2, 1]]]> : tensor<1x2x4xi32>
 
-  %sort = "mhlo.sort"(%input) ( {
+  %sort = "mhlo.sort"(%input) ({
   ^bb0(%arg1: tensor<i32>, %arg2: tensor<i32>):  // no predecessors
     %compare = "mhlo.compare"(%arg1, %arg2) {comparison_direction = "LT"} : (tensor<i32>, tensor<i32>) -> tensor<i1>
     "mhlo.return"(%compare) : (tensor<i1>) -> ()
@@ -42,7 +42,7 @@ func @sort3D() {
 func @sort_to_decreasing_seq() {
   %input = util.unfoldable_constant dense<[3, 2, 1, 4]> : tensor<4xi32>
 
-  %sort = "mhlo.sort"(%input) ( {
+  %sort = "mhlo.sort"(%input) ({
   ^bb0(%arg1: tensor<i32>, %arg2: tensor<i32>):  // no predecessors
     %compare = "mhlo.compare"(%arg1, %arg2) {comparison_direction = "GT"} : (tensor<i32>, tensor<i32>) -> tensor<i1>
     "mhlo.return"(%compare) : (tensor<i1>) -> ()

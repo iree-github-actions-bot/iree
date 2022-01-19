@@ -2,7 +2,7 @@ func @scatter_update_scalar_1D() {
   %arg0 = util.unfoldable_constant dense<0> : tensor<8xi32>
   %arg1 = util.unfoldable_constant dense<[[1], [3], [4], [7]]> : tensor<4x1xi32>
   %arg2 = util.unfoldable_constant dense<[9, 10, 11, 12]> : tensor<4xi32>
-  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ( {
+  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ({
   ^bb0(%arg3: tensor<i32>, %arg4: tensor<i32>):  // no predecessors
     "mhlo.return"(%arg4) : (tensor<i32>) -> ()
   }) {
@@ -22,7 +22,7 @@ func @scatter_update_scalar_2D() {
   %arg0 = util.unfoldable_constant dense<0> : tensor<4x3xi32>
   %arg1 = util.unfoldable_constant dense<[[0, 0], [1, 1], [2, 2]]> : tensor<3x2xi32>
   %arg2 = util.unfoldable_constant dense<[1, 2, 3]> : tensor<3xi32>
-  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ( {
+  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ({
   ^bb0(%arg3: tensor<i32>, %arg4: tensor<i32>):  // no predecessors
     "mhlo.return"(%arg4) : (tensor<i32>) -> ()
   }) {indices_are_sorted = false,
@@ -45,7 +45,7 @@ func @scatter_update_slice_2D() {
   %arg1 = util.unfoldable_constant dense<[[2], [4]]> : tensor<2x1xi32>
   %arg2 = util.unfoldable_constant dense<[[1, 2, 3],
                                           [4, 5, 6]]> : tensor<2x3xi32>
-  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ( {
+  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ({
   ^bb0(%arg3: tensor<i32>, %arg4: tensor<i32>):  // no predecessors
     "mhlo.return"(%arg4) : (tensor<i32>) -> ()
   }) {
@@ -72,7 +72,7 @@ func @scatter_add_slice_2D() {
   %arg1 = util.unfoldable_constant dense<[[2], [4]]> : tensor<2x1xi32>
   %arg2 = util.unfoldable_constant dense<[[1, 2, 3],
                                           [4, 5, 6]]> : tensor<2x3xi32>
-  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ( {
+  %0 = "mhlo.scatter"(%arg0, %arg1, %arg2) ({
   ^bb0(%arg3: tensor<i32>, %arg4: tensor<i32>):  // no predecessors
     %1 = mhlo.add %arg3, %arg4 : tensor<i32>
     "mhlo.return"(%1) : (tensor<i32>) -> ()

@@ -34,7 +34,7 @@ func private @Forward_o16DF3vQKaI__disable_call_shape_inference_true_.189(%arg0:
   %7 = mhlo.constant dense<0.000000e+00> : tensor<1x10xf32>
   %8 = mhlo.constant dense<5.000000e-01> : tensor<1x10xf32>
   %cst_6 = arith.constant dense<0> : tensor<i32>
-  %9 = "mhlo.reduce"(%arg3, %cst) ( {
+  %9 = "mhlo.reduce"(%arg3, %cst) ({
   ^bb0(%arg5: tensor<f32>, %arg6: tensor<f32>):  // no predecessors
     %115 = mhlo.minimum %arg5, %arg6 : tensor<f32>
     "mhlo.return"(%115) : (tensor<f32>) -> ()
@@ -42,7 +42,7 @@ func private @Forward_o16DF3vQKaI__disable_call_shape_inference_true_.189(%arg0:
   %10 = "mhlo.compare"(%9, %0) {comparison_direction = "EQ"} : (tensor<5xf32>, tensor<5xf32>) -> tensor<5xi1>
   %11 = "mhlo.convert"(%10) : (tensor<5xi1>) -> tensor<5xi32>
   %12 = mhlo.multiply %11, %cst_0 : tensor<5xi32>
-  %13 = "mhlo.reduce"(%12, %cst_1) ( {
+  %13 = "mhlo.reduce"(%12, %cst_1) ({
   ^bb0(%arg5: tensor<i32>, %arg6: tensor<i32>):  // no predecessors
     %115 = mhlo.maximum %arg5, %arg6 : tensor<i32>
     "mhlo.return"(%115) : (tensor<i32>) -> ()
@@ -53,7 +53,7 @@ func private @Forward_o16DF3vQKaI__disable_call_shape_inference_true_.189(%arg0:
   %17 = "mhlo.compare"(%16, %0) {comparison_direction = "EQ"} : (tensor<5xf32>, tensor<5xf32>) -> tensor<5xi1>
   %18 = "mhlo.convert"(%17) : (tensor<5xi1>) -> tensor<5xi32>
   %19 = mhlo.multiply %18, %cst_0 : tensor<5xi32>
-  %20 = "mhlo.reduce"(%19, %cst_1) ( {
+  %20 = "mhlo.reduce"(%19, %cst_1) ({
   ^bb0(%arg5: tensor<i32>, %arg6: tensor<i32>):  // no predecessors
     %115 = mhlo.maximum %arg5, %arg6 : tensor<i32>
     "mhlo.return"(%115) : (tensor<i32>) -> ()

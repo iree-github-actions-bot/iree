@@ -546,8 +546,8 @@ func @main_ex_dispatch_0_dispatch_1()
          {binding = @legacy_io::@arg0} : memref<32x24xf32>
   %2 = iree.placeholder for "interface buffer"
          {binding = @legacy_io::@arg1} : memref<24x16xf32>
-  %3 = "gpu.block_id"() {dimension = "x"} : () -> index
-  %4 = "gpu.block_id"() {dimension = "y"} : () -> index
+  %3 = gpu.block_id x
+  %4 = gpu.block_id y
   %5 = muli %4, %c8 : index
   %6 = muli %3, %c8 : index
   scf.for %arg0 = %c0 to %c24 step %c4 {
@@ -556,8 +556,8 @@ func @main_ex_dispatch_0_dispatch_1()
     ...
     %20 = subview %2[%arg0, %6]
     %21 = subview %0[%5, %6]
-    %22 = "gpu.thread_id"() {dimension = "x"} : () -> index
-    %23 = "gpu.thread_id"() {dimension = "y"} : () -> index
+    %22 = gpu.thread_id x
+    %23 = gpu.thread_id y
     %24 = cmpi "slt", %23, %10 : index
     %25 = cmpi "slt", %22, %19 : index
     %26 = and %24, %25 : i1
@@ -600,9 +600,9 @@ func @main_ex_dispatch_0()
          {binding = @legacy_io::@arg1} : memref<10x15xf32>
   %3 = iree.placeholder for "interface buffer"
          {binding = @legacy_io::@arg2} : memref<15xf32>
-  %4 = "gpu.block_id"() {dimension = "x"} : () -> index
-  %5 = "gpu.block_dim"() {dimension = "x"} : () -> index
-  %6 = "gpu.thread_id"() {dimension = "x"} : () -> index
+  %4 = gpu.block_id x
+  %5 = gpu.block_dim x
+  %6 = gpu.thread_id x
   %7 = muli %4, %5 : index
   %8 = addi %7, %6 : index
   %9 = cmpi "slt", %8, %c50 : index

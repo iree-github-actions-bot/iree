@@ -6,6 +6,7 @@
 
 #include "iree/compiler/Codegen/LLVMGPU/LLVMGPUUtils.h"
 
+#include "mlir/Dialect/GPU/GPUDialect.h"
 #include "mlir/Dialect/GPU/Passes.h"
 
 namespace mlir {
@@ -16,10 +17,10 @@ llvm::SmallVector<mlir::linalg::ProcInfo, 2> getGPUThreadIdsAndCounts(
     llvm::ArrayRef<int64_t> workgroupSize) {
   assert(numDims <= kNumGPUDims);
   llvm::SmallVector<mlir::linalg::ProcInfo, 2> procInfo(numDims);
-  std::array<llvm::StringRef, kNumGPUDims> dimAttr{"x", "y", "z"};
   mlir::Type indexType = builder.getIndexType();
   for (unsigned i = 0; i < numDims; ++i) {
-    mlir::StringAttr attr = builder.getStringAttr(dimAttr[i]);
+    auto attr = gpu::DimensionAttr::get(builder.getContext(),
+                                        *gpu::symbolizeDimension(i));
     procInfo[numDims - 1 - i] = {
         builder.create<mlir::gpu::ThreadIdOp>(loc, indexType, attr),
         builder.create<mlir::arith::ConstantOp>(
@@ -33,10 +34,10 @@ llvm::SmallVector<mlir::linalg::ProcInfo, 2> getSubgroupIdsAndCounts(
     llvm::ArrayRef<int64_t> numSubgroups) {
   assert(numDims <= kNumGPUDims);
   llvm::SmallVector<mlir::linalg::ProcInfo, 2> procInfo(numDims);
-  std::array<llvm::StringRef, kNumGPUDims> dimAttr{"x", "y", "z"};
   mlir::Type indexType = builder.getIndexType();
   for (unsigned i = 0; i < numDims; ++i) {
-    mlir::StringAttr attr = builder.getStringAttr(dimAttr[i]);
+    auto attr = gpu::DimensionAttr::get(builder.getContext(),
+                                        *gpu::symbolizeDimension(i));
     mlir::Value subgroupId =
         builder.create<mlir::gpu::ThreadIdOp>(loc, indexType, attr);
     if (i == 0) {

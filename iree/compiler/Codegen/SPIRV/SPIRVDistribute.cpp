@@ -39,8 +39,8 @@ struct DistributeLoop final : public OpRewritePattern<scf::ForOp> {
 
     Location loc = forOp.getLoc();
     auto indexType = rewriter.getIndexType();
-    const std::array<const char *, 3> symDims = {"x", "y", "z"};
-    auto symDimAttr = rewriter.getStringAttr(symDims[numDimAttr.getInt()]);
+    auto symDimAttr = gpu::DimensionAttr::get(
+        loc.getContext(), *gpu::symbolizeDimension(numDimAttr.getInt()));
     auto idOp = rewriter.create<gpu::ThreadIdOp>(loc, indexType, symDimAttr);
     auto countOp = rewriter.create<gpu::BlockDimOp>(loc, indexType, symDimAttr);
 

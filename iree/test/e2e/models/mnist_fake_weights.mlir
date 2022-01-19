@@ -30,7 +30,7 @@ module {
     %16 = "mhlo.dot"(%15, %8) : (tensor<1x128xf32>, tensor<128x10xf32>) -> tensor<1x10xf32>
     %17 = "mhlo.broadcast_in_dim"(%7) {broadcast_dimensions = dense<1> : tensor<1xi64>} : (tensor<10xf32>) -> tensor<1x10xf32>
     %18 = mhlo.add %16, %17 : tensor<1x10xf32>
-    %19 = "mhlo.reduce"(%18, %5) ( {
+    %19 = "mhlo.reduce"(%18, %5) ({
     ^bb0(%arg1: tensor<f32>, %arg2: tensor<f32>):  // no predecessors
       %26 = mhlo.maximum %arg1, %arg2 : tensor<f32>
       "mhlo.return"(%26) : (tensor<f32>) -> ()
@@ -38,7 +38,7 @@ module {
     %20 = "mhlo.broadcast_in_dim"(%19) {broadcast_dimensions = dense<0> : tensor<1xi64>} : (tensor<1xf32>) -> tensor<1x10xf32>
     %21 = mhlo.subtract %18, %20 : tensor<1x10xf32>
     %22 = "mhlo.exponential"(%21) : (tensor<1x10xf32>) -> tensor<1x10xf32>
-    %23 = "mhlo.reduce"(%22, %6) ( {
+    %23 = "mhlo.reduce"(%22, %6) ({
     ^bb0(%arg1: tensor<f32>, %arg2: tensor<f32>):  // no predecessors
       %26 = mhlo.add %arg1, %arg2 : tensor<f32>
       "mhlo.return"(%26) : (tensor<f32>) -> ()

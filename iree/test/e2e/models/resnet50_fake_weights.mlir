@@ -986,7 +986,7 @@ module {
     %656 = "mhlo.batch_norm_inference"(%655, %335, %334, %333, %332) {epsilon = 1.001000e-05 : f32, feature_index = 3 : i64} : (tensor<1x112x112x64xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>) -> tensor<1x112x112x64xf32>
     %657 = mhlo.maximum %656, %320 : tensor<1x112x112x64xf32>
     %658 = "mhlo.pad"(%657, %331) {edge_padding_high = dense<[0, 1, 1, 0]> : tensor<4xi64>, edge_padding_low = dense<[0, 1, 1, 0]> : tensor<4xi64>, interior_padding = dense<0> : tensor<4xi64>} : (tensor<1x112x112x64xf32>, tensor<f32>) -> tensor<1x114x114x64xf32>
-    %659 = "mhlo.reduce_window"(%658, %330) ( {
+    %659 = "mhlo.reduce_window"(%658, %330) ({
     ^bb0(%arg1: tensor<f32>, %arg2: tensor<f32>):  // no predecessors
       %944 = mhlo.maximum %arg1, %arg2 : tensor<f32>
       "mhlo.return"(%944) : (tensor<f32>) -> ()
@@ -1263,7 +1263,7 @@ module {
     %929 = "mhlo.batch_norm_inference"(%928, %647, %646, %645, %644) {epsilon = 1.001000e-05 : f32, feature_index = 3 : i64} : (tensor<1x7x7x2048xf32>, tensor<2048xf32>, tensor<2048xf32>, tensor<2048xf32>, tensor<2048xf32>) -> tensor<1x7x7x2048xf32>
     %930 = mhlo.add %915, %929 : tensor<1x7x7x2048xf32>
     %931 = mhlo.maximum %930, %328 : tensor<1x7x7x2048xf32>
-    %932 = "mhlo.reduce"(%931, %331) ( {
+    %932 = "mhlo.reduce"(%931, %331) ({
     ^bb0(%arg1: tensor<f32>, %arg2: tensor<f32>):  // no predecessors
       %944 = mhlo.add %arg1, %arg2 : tensor<f32>
       "mhlo.return"(%944) : (tensor<f32>) -> ()
@@ -1272,7 +1272,7 @@ module {
     %934 = "mhlo.dot"(%933, %651) : (tensor<1x2048xf32>, tensor<2048x1000xf32>) -> tensor<1x1000xf32>
     %935 = "mhlo.broadcast_in_dim"(%650) {broadcast_dimensions = dense<1> : tensor<1xi64>} : (tensor<1000xf32>) -> tensor<1x1000xf32>
     %936 = mhlo.add %934, %935 : tensor<1x1000xf32>
-    %937 = "mhlo.reduce"(%936, %330) ( {
+    %937 = "mhlo.reduce"(%936, %330) ({
     ^bb0(%arg1: tensor<f32>, %arg2: tensor<f32>):  // no predecessors
       %944 = mhlo.maximum %arg1, %arg2 : tensor<f32>
       "mhlo.return"(%944) : (tensor<f32>) -> ()
@@ -1280,7 +1280,7 @@ module {
     %938 = "mhlo.broadcast_in_dim"(%937) {broadcast_dimensions = dense<0> : tensor<1xi64>} : (tensor<1xf32>) -> tensor<1x1000xf32>
     %939 = mhlo.subtract %936, %938 : tensor<1x1000xf32>
     %940 = "mhlo.exponential"(%939) : (tensor<1x1000xf32>) -> tensor<1x1000xf32>
-    %941 = "mhlo.reduce"(%940, %331) ( {
+    %941 = "mhlo.reduce"(%940, %331) ({
     ^bb0(%arg1: tensor<f32>, %arg2: tensor<f32>):  // no predecessors
       %944 = mhlo.add %arg1, %arg2 : tensor<f32>
       "mhlo.return"(%944) : (tensor<f32>) -> ()

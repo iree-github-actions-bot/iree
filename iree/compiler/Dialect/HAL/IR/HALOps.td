@@ -1438,7 +1438,6 @@ def HAL_ExecutableSourceOp : HAL_Op<"executable.source", [
     custom<SymbolVisibility>($sym_visibility)
     $sym_name
     attr-dict-with-keyword
-    ``
     regions
   }];
 
@@ -1485,7 +1484,6 @@ def HAL_ExecutableOp : HAL_Op<"executable", [
     custom<SymbolVisibility>($sym_visibility)
     $sym_name
     attr-dict-with-keyword
-    ``
     regions
   }];
 
@@ -1610,7 +1608,6 @@ def HAL_ExecutableVariantOp : HAL_Op<"executable.variant", [
     $sym_name
     `,` `target` `=` $target
     attr-dict-with-keyword
-    ``
     regions
   }];
 

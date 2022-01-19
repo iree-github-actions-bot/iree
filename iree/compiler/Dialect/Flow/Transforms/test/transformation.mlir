@@ -64,7 +64,7 @@ func @interleavedDot(%arg0 : tensor<4x4xf32>) -> tensor<4x4xf32> {
 
 func @reduction(%arg0 : tensor<4x8xf32>) -> tensor<4xf32> {
   %0 = arith.constant dense<0.0> : tensor<f32>
-  %1 = "mhlo.reduce"(%arg0, %0) ( {
+  %1 = "mhlo.reduce"(%arg0, %0) ({
   ^bb0(%arg1 : tensor<f32>, %arg2 : tensor<f32>):
     %2 = mhlo.add %arg1, %arg2 : tensor<f32>
     "mhlo.return"(%2) : (tensor<f32>) -> ()

@@ -28,7 +28,7 @@ module {
     %1 = util.global.load.indirect %0 : !util.ptr<tensor<4xf32>> -> tensor<4xf32>
     %2 = "mhlo.broadcast_in_dim"(%1) {broadcast_dimensions = dense<0> : tensor<1xi64>} : (tensor<4xf32>) -> tensor<4x4xf32>
     %4 = mhlo.constant dense<0xFF800000> : tensor<f32>
-    %3 = "mhlo.reduce"(%2, %4) ( {
+    %3 = "mhlo.reduce"(%2, %4) ({
     ^bb0(%arg3: tensor<f32>, %arg4: tensor<f32>):  // no predecessors
       %5393 = mhlo.maximum %arg3, %arg4 : tensor<f32>
       "mhlo.return"(%5393) : (tensor<f32>) -> ()

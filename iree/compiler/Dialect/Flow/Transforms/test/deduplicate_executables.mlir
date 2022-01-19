@@ -195,7 +195,7 @@ flow.executable @nested_ops_ex_0 {
   builtin.module {
     func @nested_ops_entry_0(%input: tensor<1x4xi32>) -> tensor<1xi32> {
       %0 = arith.constant dense<0> : tensor<i32>
-      %1 = "mhlo.reduce"(%input, %0) ( {
+      %1 = "mhlo.reduce"(%input, %0) ({
       ^bb0(%arg0: tensor<i32>, %arg1: tensor<i32>):   // no predecessors
         %3 = "mhlo.add"(%arg0, %arg1) : (tensor<i32>, tensor<i32>) -> tensor<i32>
         "mhlo.return"(%3) : (tensor<i32>) -> ()
@@ -210,7 +210,7 @@ flow.executable @nested_ops_ex_1 {
   builtin.module {
     func @nested_ops_entry_1(%input: tensor<1x4xi32>) -> tensor<1xi32> {
       %0 = arith.constant dense<0> : tensor<i32>
-      %1 = "mhlo.reduce"(%input, %0) ( {
+      %1 = "mhlo.reduce"(%input, %0) ({
       ^bb0(%arg0: tensor<i32>, %arg1: tensor<i32>):   // no predecessors
         %3 = "mhlo.add"(%arg0, %arg1) : (tensor<i32>, tensor<i32>) -> tensor<i32>
         "mhlo.return"(%3) : (tensor<i32>) -> ()
@@ -225,7 +225,7 @@ flow.executable @nested_ops_ex_2 {
   builtin.module {
     func @nested_ops_entry_2(%input: tensor<1x4xi32>) -> tensor<1xi32> {
       %0 = arith.constant dense<0> : tensor<i32>
-      %1 = "mhlo.reduce"(%input, %0) ( {
+      %1 = "mhlo.reduce"(%input, %0) ({
       ^bb0(%arg0: tensor<i32>, %arg1: tensor<i32>):   // no predecessors
         %3 = "mhlo.maximum"(%arg0, %arg1) : (tensor<i32>, tensor<i32>) -> tensor<i32>
         "mhlo.return"(%3) : (tensor<i32>) -> ()
@@ -254,7 +254,7 @@ flow.executable @attributes_ex_0 {
   builtin.module {
     func @attributes_entry_0(%input: tensor<1x4xi32>) -> tensor<1xi32> {
       %0 = arith.constant dense<0> : tensor<i32>
-      %1 = "mhlo.reduce"(%input, %0) ( {
+      %1 = "mhlo.reduce"(%input, %0) ({
       ^bb0(%arg0: tensor<i32>, %arg1: tensor<i32>):   // no predecessors
         %3 = "mhlo.maximum"(%arg0, %arg1) : (tensor<i32>, tensor<i32>) -> tensor<i32>
         "mhlo.return"(%3) : (tensor<i32>) -> ()
@@ -270,7 +270,7 @@ flow.executable @attributes_ex_1 {
   builtin.module {
     func @attributes_entry_1(%input: tensor<1x4xi32>) -> tensor<4xi32> {
       %0 = arith.constant dense<0> : tensor<i32>
-      %1 = "mhlo.reduce"(%input, %0) ( {
+      %1 = "mhlo.reduce"(%input, %0) ({
       ^bb0(%arg0: tensor<i32>, %arg1: tensor<i32>):   // no predecessors
         %3 = "mhlo.maximum"(%arg0, %arg1) : (tensor<i32>, tensor<i32>) -> tensor<i32>
         "mhlo.return"(%3) : (tensor<i32>) -> ()
@@ -287,7 +287,7 @@ flow.executable @attributes_ex_2 {
   builtin.module {
     func @attributes_entry_2(%input: tensor<1x4xi32>) -> tensor<1xi32> {
       %0 = arith.constant dense<0> : tensor<i32>
-      %1 = "mhlo.reduce"(%input, %0) ( {
+      %1 = "mhlo.reduce"(%input, %0) ({
       ^bb0(%arg0: tensor<i32>, %arg1: tensor<i32>):   // no predecessors
         %3 = "mhlo.maximum"(%arg0, %arg1) : (tensor<i32>, tensor<i32>) -> tensor<i32>
         "mhlo.return"(%3) : (tensor<i32>) -> ()

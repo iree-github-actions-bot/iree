@@ -2,7 +2,7 @@ func @if_true_test() {
   %0 = util.unfoldable_constant dense<true> : tensor<i1>
   %1 = util.unfoldable_constant dense<10> : tensor<i32>
   %path = util.unfoldable_constant 1 : i32
-  %2 = "tosa.cond_if"(%0, %1) ( {
+  %2 = "tosa.cond_if"(%0, %1) ({
   ^bb0(%arg0 : tensor<i32>):
     check.expect_true(%path) : i32
     %3 = util.unfoldable_constant dense<10> : tensor<i32>
@@ -21,7 +21,7 @@ func @if_false_test() {
   %0 = util.unfoldable_constant dense<false> : tensor<i1>
   %1 = util.unfoldable_constant dense<10> : tensor<i32>
   %path = util.unfoldable_constant 0 : i32
-  %2 = "tosa.cond_if"(%0, %1) ( {
+  %2 = "tosa.cond_if"(%0, %1) ({
   ^bb0(%arg0 : tensor<i32>):
     check.expect_true(%path) : i32
     "tosa.yield"(%arg0) : (tensor<i32>) -> ()

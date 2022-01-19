@@ -110,7 +110,7 @@ distribute the work onto threads within the block.
 
 At this stage the IR looks like the following:
 ```
-    %8 = "gpu.thread_id"() {dimension = "x"} : () -> index
+    %8 = gpu.thread_id x
     %9 = affine.apply affine_map<()[s0] -> (s0 * 4)>()[%8]
     %10 = memref.subview %in0[%9] [4] [1] : memref<128xf32, affine_map<(d0)[s0] -> (d0 + s0)>> to memref<4xf32, affine_map<(d0)[s0] -> (d0 + s0)>>
     %11 = memref.subview %in1[%9] [4] [1] : memref<128xf32, affine_map<(d0)[s0] -> (d0 + s0)>> to memref<4xf32, affine_map<(d0)[s0] -> (d0 + s0)>>
@@ -141,7 +141,7 @@ generated.
 
 This convert the previous IR to:
 ```
-    %8 = "gpu.thread_id"() {dimension = "x"} : () -> index
+    %8 = gpu.thread_id x
     %9 = affine.apply affine_map<()[s0] -> (s0 * 4)>()[%8]
     %10 = memref.subview %in0[%9] [4] [1] : memref<128xf32, affine_map<(d0)[s0] -> (d0 + s0)>> to memref<4xf32, affine_map<(d0)[s0] -> (d0 + s0)>>
     %11 = memref.subview %in1[%9] [4] [1] : memref<128xf32, affine_map<(d0)[s0] -> (d0 + s0)>> to memref<4xf32, affine_map<(d0)[s0] -> (d0 + s0)>>
