@@ -1,0 +1,31 @@
+
+
+# Copyright 2022 The IREE Authors
+#
+# Licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+name: Everything
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: The reference of the commit to check out
+        required: false
+        default: ${{ github.ref }}
+        type: string
+
+
+jobs:
+  checkout:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: "Checking out repository"
+        uses: actions/checkout@7884fcad6b5d53d10323aee724dc68d8b9096a2e  # v2
+        with:
+          ref: ${{ inputs.ref }}
