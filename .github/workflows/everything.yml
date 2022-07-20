@@ -13,8 +13,7 @@ on:
     inputs:
       ref:
         description: The reference of the commit to check out
-        required: false
-        default: ${{ github.ref }}
+        required: true
         type: string
 
 
